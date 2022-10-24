@@ -39,7 +39,7 @@ export const DialogComponent = ({
         </span>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id="alert-dialog-description" component="div">
           <span className="sub" style={{ fontFamily: "Noto sans" }}>
             Your Score: {parseInt(Score) ?? "0"}
           </span>
