@@ -22,7 +22,7 @@ const appConfig = {
   mute: "&mute=1",
   //mute video 1=Yes 0=No
 
-  Trials: "2",
+  Trials: 3,
   //Total rounds in same speed
   url: "https://omc0dwxiy7.execute-api.ap-south-1.amazonaws.com",
 
