@@ -372,7 +372,7 @@ function Buttons() {
   ];
 
   function timeout() {
-    if (round % appConfig.Trials === 0 && initial <= 7) {
+    if ((round + 1) % appConfig.Trials === 0 && initial <= 7) {
       setInitial(initial + 1);
       setaudioSpeed(parseInt(audioSpeed) + initial + (6 - initial));
       if (initial === 7) {
@@ -408,7 +408,7 @@ function Buttons() {
 
   function roundUpdate(check) {
     responceAudio();
-    if (initial < 8 && check === "button" && round % appConfig.Trials === 0) {
+    if (initial < 8 && check === "button" && (round + 1) % appConfig.Trials !== 0) {
       setRound(round + 1);
     } else {
       handleClickOpen();
