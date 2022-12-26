@@ -1,3 +1,5 @@
+import React, {useState, useEffect} from "react";
+
 export const ButtonGroup = ({
   disabled,
   currentKey,
@@ -9,26 +11,52 @@ export const ButtonGroup = ({
   startButton,
   roundUpdate,
   reload,
+  round
 }) => {
+  const [currentRound, setCurrentRound] = useState(round)
+  const [disabledAfterClick, setDisabledAfterClick] = useState(false);
+
+  const handleClickButton = currentKeyValue => {
+    setDisabledAfterClick(true);
+    currentKey.current = currentKeyValue;
+    // assigment(currentKeyValue);
+    // setReload(!reload);
+    // output();
+    // stopButton();
+    disable();
+    set();
+    // startButton();
+    roundUpdate("button");
+  }
+
+  useEffect(() => {
+    if(round !== currentRound){
+      setCurrentRound(round);
+      setDisabledAfterClick(false);
+    }
+  }, [round]);
+
+  let disabledButton = Boolean(disabledAfterClick || disabled);
   return (
-    <table id="matrix" style={{ opacity: disabled ? 0.5 : 1 }}>
+    <table id="matrix" style={{ opacity: disabledButton ? 0.5 : 1 }}>
       <tbody>
         <tr>
           <td>
             <button
               onClick={() => {
+                handleClickButton("0000");
                 // clickSound();
-                currentKey.current = "0000";
-                assigment("0000");
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+                // currentKey.current = "0000";
+                // handleClickButton("0000");
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/01_Blue.png")}
@@ -40,18 +68,19 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0100");
-                currentKey.current = "0100";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0100");
+                // handleClickButton("0100");
+                // currentKey.current = "0100";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/01_Red.png")}
@@ -64,18 +93,19 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0200");
-                currentKey.current = "0200";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0200");
+                // handleClickButton("0200");
+                // currentKey.current = "0200";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/01_White.png")}
@@ -87,18 +117,19 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0300");
-                currentKey.current = "0300";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0300");
+                // assigment("0300");
+                // currentKey.current = "0300";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/01_Green.png")}
@@ -112,18 +143,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0001");
-                assigment("0001");
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0001");
+                // assigment("0001");
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/02_Blue.png")}
@@ -135,18 +166,19 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0101");
-                currentKey.current = "0101";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0101");
+                // assigment("0101");
+                // currentKey.current = "0101";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/02_Red.png")}
@@ -158,18 +190,19 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                currentKey.current = "0201";
-                assigment("0201");
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0201");
+                // currentKey.current = "0201";
+                // assigment("0201");
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/02_White.png")}
@@ -181,18 +214,19 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0301");
-                currentKey.current = "0301";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0301");
+                // assigment("0301");
+                // currentKey.current = "0301";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/02_Green.png")}
@@ -206,18 +240,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0002");
-                currentKey.current = "0002";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0002");
+                // currentKey.current = "0002";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/03_Blue.png")}
@@ -229,18 +263,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                currentKey.current = "0102";
-                assigment("0102");
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0102");
+                // currentKey.current = "0102";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/03_Red.png")}
@@ -253,18 +287,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0202");
-                currentKey.current = "0202";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0202");
+                // currentKey.current = "0202";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/03_White.png")}
@@ -276,18 +310,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0302");
-                currentKey.current = "0302";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0302");
+                // currentKey.current = "0302";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/03_Green.png")}
@@ -301,18 +335,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0003");
-                currentKey.current = "0003";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
+              onClick={() => {
+                handleClickButton("0003");
+                // currentKey.current = "0003";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
                 roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/04_Blue.png")}
@@ -324,18 +358,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0103");
-                currentKey.current = "0103";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0103");
+                // currentKey.current = "0103";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/04_Red.png")}
@@ -348,18 +382,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0203");
-                currentKey.current = "0203";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0203");
+                // currentKey.current = "0203";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/04_White.png")}
@@ -371,18 +405,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0303");
-                currentKey.current = "0303";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0303");
+                // currentKey.current = "0303";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/04_Green.png")}
@@ -396,18 +430,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0004");
-                currentKey.current = "0004";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0004");
+                // currentKey.current = "0004";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/05_Blue.png")}
@@ -419,18 +453,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0104");
-                currentKey.current = "0104";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0104");
+                // currentKey.current = "0104";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/05_Red.png")}
@@ -443,18 +477,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0204");
-                currentKey.current = "0204";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0204");
+                // currentKey.current = "0204";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/05_White.png")}
@@ -466,18 +500,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0304");
-                currentKey.current = "0304";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0304");
+                // currentKey.current = "0304";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/05_Green.png")}
@@ -491,18 +525,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0005");
-                currentKey.current = "0005";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0005");
+                // currentKey.current = "0005";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/06_Blue.png")}
@@ -514,18 +548,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0105");
-                currentKey.current = "0105";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0105");
+                // currentKey.current = "0105";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/06_Red.png")}
@@ -538,18 +572,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0205");
-                currentKey.current = "0205";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0205");
+                // currentKey.current = "0205";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/06_White.png")}
@@ -561,18 +595,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0305");
-                currentKey.current = "0305";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0305");
+                // currentKey.current = "0305";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/06_Green.png")}
@@ -586,18 +620,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0006");
-                currentKey.current = "0006";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0006");
+                // currentKey.current = "0006";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/07_Blue.png")}
@@ -609,18 +643,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0106");
-                currentKey.current = "0106";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0106");
+                // currentKey.current = "0106";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/07_Red.png")}
@@ -633,18 +667,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0206");
-                currentKey.current = "0206";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0206");
+                // currentKey.current = "0206";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/07_White.png")}
@@ -656,18 +690,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0306");
-                currentKey.current = "0306";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0306");
+                // currentKey.current = "0306";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/07_Green.png")}
@@ -681,18 +715,18 @@ export const ButtonGroup = ({
         <tr>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0007");
-                currentKey.current = "0007";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0007");
+                // currentKey.current = "0007";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/08_Blue.png")}
@@ -704,18 +738,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0107");
-                currentKey.current = "0107";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0107");
+                // currentKey.current = "0107";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/08_Red.png")}
@@ -728,18 +762,18 @@ export const ButtonGroup = ({
 
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0207");
-                currentKey.current = "0207";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0207");
+                // currentKey.current = "0207";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/08_White.png")}
@@ -751,18 +785,18 @@ export const ButtonGroup = ({
           </td>
           <td>
             <button
-              onClickCapture={() => {
-                assigment("0307");
-                currentKey.current = "0307";
-                setReload(!reload);
-                // output();
-                set();
-                stopButton();
-                disable();
-                startButton();
-                roundUpdate("button");
+              onClick={() => {
+                handleClickButton("0307");
+                // currentKey.current = "0307";
+                // setReload(!reload);
+                // // output();
+                // set();
+                // stopButton();
+                // disable();
+                // startButton();
+                // roundUpdate("button");
               }}
-              disabled={disabled}
+              disabled={disabledButton}
             >
               <img
                 src={require("../Assets/Button/08_Green.png")}

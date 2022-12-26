@@ -29,10 +29,10 @@ function csv(generated) {
   function customersData() {
     const custs = [];
     // custs[0] = name;
-    for (let i = 1; i <= 25; i++) {
+    for (let i = 0; i < val1.length; i++) {
       custs[i] = {
-        Generated: val2[i],
-        UserInput: val1[i],
+        Generated: val1[i],
+        UserInput: val2[i],
         Answer: val3[i],
         Time: val4[i],
         Username: name.split("_")[0],

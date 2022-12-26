@@ -42,15 +42,15 @@ var file = "00";
 var i = 0;
 function Buttons() {
   const [open, setOpen] = React.useState(false);
-  const key = useRef();
+  const userInputRef = useRef();
   const answerValueRef = useRef();
   const initialValueRef = useRef(0);
   const triggerPlayCorrectAudio = createTriggerPlayAudio("btnCorrect");
   const triggerPlayWrongAudio = createTriggerPlayAudio("btnWrong");
 
-  const [reload, setReload] = useState();
-  const [userInput, setuserInput] = useState([""]);
-  const [generated, setGenerated] = useState([""]);
+  // const [reload, setReload] = useState();
+  // const [userInput, setuserInput] = useState([""]);
+  const [generated, setGenerated] = useState([]);
   const [value, setValue] = useState(0);
   const [Score, setScore] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -60,11 +60,11 @@ function Buttons() {
   const [aaShow, setaaShow] = useState("");
   const [bbShow, setbbShow] = useState("");
   const [ccShow, setccshow] = useState("");
-  const [csvUser, setCsvUser] = useState([""]);
-  const [csvResult, setCsvResult] = useState([""]);
+  const [csvUser, setCsvUser] = useState([]);
+  const [csvResult, setCsvResult] = useState([]);
   const [startTime, setStartTime] = useState();
-  const [diffrence, setDiffrence] = useState(0);
-  const [time, setTime] = useState([""]);
+  // const [diffrence, setDiffrence] = useState(0);
+  const [time, setTime] = useState([]);
   const [dead, setDead] = React.useState(0);
   const [audioSpeed, setaudioSpeed] = useState("18");
   const [code, setCode] = useState();
@@ -395,10 +395,10 @@ function Buttons() {
     setOpen(false);
   };
 
-  function assigment(a) {
-    key.current = a;
-    setuserInput((userInput) => [...userInput, a]);
-  }
+  // function assigment(a) {
+  //   userInputRef.current = a;
+  //   setuserInput((userInput) => [...userInput, a]);
+  // }
   function disable() {
     setDisabled(true);
     setTimeout(() => {
@@ -408,10 +408,7 @@ function Buttons() {
 
   function roundUpdate(check) {
     responceAudio();
-    if(initialValueRef.current === 8) {
-      handleClickOpen();
-    }
-    if (check === "button" && round % appConfig.Trials === 0) {
+    if (initial < 8 && check === "button" && round % appConfig.Trials === 0) {
       setRound(round + 1);
     } else {
       handleClickOpen();
@@ -424,28 +421,31 @@ function Buttons() {
   function startButton() {
     setStartTime(Date.now());
   }
-  function stopButton() {
-    var endTime = Date.now();
-    setDiffrence(endTime - startTime);
-  }
+  // function stopButton() {
+  //   var endTime = Date.now();
+  //   setDiffrence(endTime - startTime);
+  // }
 
   function calc(slider) {
-    var text = `${"0"}${slider}${key.current ?? "00"}`;
-    if (i % 2 === 0) {
-      setCsvUser((csvUser) => [...csvUser, text]);
-      setTime((time) => [...time, diffrence]);
-    }
-    i++;
-    console.log("===>", text, generated[generated.length - 1]);
+    var text = `${"0"}${slider}${userInputRef.current ?? "00"}`;
+    console.log(text, userInputRef.current);
+    const answerTime = Date.now() - startTime;
+    // if (i % 2 === 0) {
+    setCsvUser((csvUser) => [...csvUser, text]);
+    setTime((time) => [...time, answerTime]);
+    // }
+    // i++;
+    // console.log("===>", text, generated[generated.length - 1]);
     if (text === generated[generated.length - 1]) {
       setAnswer("true");
       answerValueRef.current = "true";
-      if (i % 2 === 0) setCsvResult((csvResult) => [...csvResult, "true"]);
-      var res = 10 - diffrence / 1000;
+      // if (i % 2 === 0) 
+      setCsvResult((csvResult) => [...csvResult, "true"]);
+      var res = 10 - answerTime / 1000;
       if (res < 0) return 1;
       else return res;
     } else {
-      if (i % 2 === 0);
+      // if (i % 2 === 0);
       setCsvResult((csvResult) => [...csvResult, "false"]);
       setAnswer("false");
       answerValueRef.current = "false";
@@ -474,11 +474,11 @@ function Buttons() {
     setccshow(CC[chars[5]]);
   }
   function set() {
-    console.log({ SEC: calc(value, key, file) });
+    const newScore = parseInt(calc(value, userInputRef, file));
+    // console.log({ SEC: newScore });
     if (rfile) file = rfile.slice(8, 14);
-    setScore(parseInt(Score) + parseInt(calc(value, key, file)));
-    data(parseInt(Score) + parseInt(calc(value, key, file)));
-    assigmentRandom(file);
+    setScore(parseInt(Score) + newScore);
+    data(parseInt(Score) + newScore);
   }
 
   function playAudio(initial) {
@@ -487,41 +487,35 @@ function Buttons() {
         Math.floor(Math.random() * eval(`speed${initial}`).length)
       ] ?? "talker2_010203_spd_66.wav";
     const randomSong = require(`../Audio/${rfile}`);
-    // var audio1 = new Audio(randomSong);
-    // audio1.load();
     if (rfile) file = rfile.slice(8, 14);
     assigmentRandom(file);
-    playQuestionAudioFunc(randomSong)
-    // setTimeout(() => {
-    //   audio1.play();
-    // }, 500);
+    playQuestionAudioFunc(randomSong);
     startButton();
   }
 
   function responceAudio() {
-    if (initial !== 0) {
-  
+    // if (initial !== 0) {
       if (answerValueRef.current === "false") {
         triggerPlayWrongAudio();
       }
       if (answerValueRef.current === "true") {
         triggerPlayCorrectAudio();
       }
-    }
+    // }
   }
 
   const handleChangeRound = (isFirstTime) => {
-    timeout();
+   if(!isFirstTime) timeout();
     output();
     if (initial < 8 && dead !== 1) {
-      if (initial > 0);
-      disable();
+      // if (initial > 0);
+      // disable();
       if(isFirstTime){
-        // initialValueRef.current = initial;
+        initialValueRef.current = initial;
         document.getElementById("btnQuestion").click();
       } else {
         if(questionTimeout) clearTimeout(questionTimeout);
-        // initialValueRef.current = initial;
+        initialValueRef.current = initial;
         questionTimeout = setTimeout(() => {
           document.getElementById("btnQuestion").click();
         }, 300);
@@ -535,9 +529,9 @@ function Buttons() {
     }
   }, [round, show]);
 
-  useEffect(() => {
-    console.log({ Score });
-  }, [Score]);
+  // useEffect(() => {
+  //   console.log({ Score });
+  // }, [Score]);
 
   const playclick = () => {
     playAudioFunc(playfile);
@@ -647,16 +641,17 @@ function Buttons() {
             </div>
             <div className="col-4 mt-3">
               <ButtonGroup
+                round={round}
                 disabled={disabled}
-                currentKey={key}
-                assigment={assigment}
-                setReload={setReload}
+                currentKey={userInputRef}
+                // assigment={assigment}
+                // setReload={setReload}
                 set={set}
-                stopButton={stopButton}
+                // stopButton={stopButton}
                 disable={disable}
-                startButton={startButton}
+                // startButton={startButton}
                 roundUpdate={roundUpdate}
-                reload={reload}
+                // reload={reload}
               />
             </div>
           </div>
