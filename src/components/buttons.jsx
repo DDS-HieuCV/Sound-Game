@@ -25,7 +25,6 @@ import { Button } from "@mui/material";
 import Papa from "papaparse";
 
 const playfile = require("../Audio/add/click.wav");
-const defaultSong = require(`../Audio/talker2_010203_spd_66.wav`);
 var csvFilePath = require("../Assets/data/B1G01_Stimuli.csv");
 
 const AA = [
@@ -75,6 +74,7 @@ function Buttons() {
   const [show, setShow] = useState(false);
 
   const [disables, setDisables] = useState(true);
+  const [isLoadingCsv, serIsLoadingCsv] = useState(true);
 
   var date;
   var userToPost;
@@ -270,8 +270,10 @@ function Buttons() {
   }
 
   useEffect(() => {
-    arrPlayAudioIndex = []
-    handleCsvData();
+    handleCsvData().then(errContent => {
+      serIsLoadingCsv(false);
+      if (errContent) alert(errContent);
+    });
   }, []);
 
   return (
@@ -311,10 +313,10 @@ function Buttons() {
 
             <button
               onClick={playclick}
-              disabled={disables}
+              disabled={disables || isLoadingCsv}
               className="button-29 my-5"
             >
-              Play Now
+              {isLoadingCsv ? "LOADING" : "Play Now"}
             </button>
 
             <button className="button-default" onClick={toggle}>
@@ -419,38 +421,53 @@ const handlePlayAudio = (audioUrl, audioEl) => {
 }
 
 const handleCsvData = () => {
-  try {
-    let results = [];
-    Papa.parse(csvFilePath, {
-      download: true,
-      complete: (response) => {
-        if (
-          response.data &&
-          Array.isArray(response.data) &&
-          Array.isArray(response.data[1]) &&
-          response.data[1].length >= 10
-        ) {
-          hasCsvData = true;
-          // Column structure: Block, Talker,	CallsignNum,	Callsign,	ColorNum,	Color,	NumberNum,	Number,	Speed,	Filename
-          response.data.shift();
-          response.data.forEach((rowData) => {
-            let speedIndex = rowData[0] - 1;
-            if(speedIndex < 0) return;
+  arrPlayAudioIndex = [];
+  const ERR_CANNOT_DOWNLOAD = "Cannot download the file from url: " + appConfig.csvUrl + ". Please confirm that the file exists and permissions are correct.";
+  const ERR_CANNOT_PARSE = "Unable to parse the CSV file. Please check the CSV file and upload again. Error log:";
 
-            let arrSpeedAudioPath = results[speedIndex] || [];
-            arrSpeedAudioPath.push(rowData[9]);
-            results[speedIndex] = arrSpeedAudioPath;
-          });
-        }
-        // Update data 
-        results.forEach((speedArray, index) => eval(`speed${index} = speedArray`))
-        console.log("Load data from CSV");
-      },
-    });
-  } catch (error) {
-    // If file doesnt exist, do nothing
-    console.log(error);
-  }
+  return new Promise((resolve) => {
+    try {
+      let results = [];
+      Papa.parse(appConfig.csvUrl, {
+        download: true,
+        complete: (response) => {
+          console.log("response.data", response.data);
+          if (
+            response.data &&
+            Array.isArray(response.data) &&
+            Array.isArray(response.data[1]) &&
+            response.data[1].length === 10
+          ) {
+            hasCsvData = true;
+            // Column structure: Block, Talker,	CallsignNum,	Callsign,	ColorNum,	Color,	NumberNum,	Number,	Speed,	Filename
+            response.data.shift();
+            response.data.forEach((rowData) => {
+              let speedIndex = rowData[0] - 1;
+              if (speedIndex < 0) return;
+
+              let arrSpeedAudioPath = results[speedIndex] || [];
+              arrSpeedAudioPath.push(rowData[9]);
+              results[speedIndex] = arrSpeedAudioPath;
+            });
+            // Update data 
+            results.forEach((speedArray, index) => eval(`speed${index} = speedArray`))
+            console.log("Load data from CSV");
+            resolve();
+          } else {
+            resolve(ERR_CANNOT_DOWNLOAD);
+          }
+        },
+        error:  (err, file, inputElem, reason) => {
+          console.log(err);
+          resolve(ERR_CANNOT_DOWNLOAD);
+        },
+      });
+    } catch (exception) {
+      console.log(exception);
+      resolve(ERR_CANNOT_PARSE + exception.toString());
+    }
+  });
+
 };
 
 var hasCsvData = false;

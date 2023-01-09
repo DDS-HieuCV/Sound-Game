@@ -33,5 +33,7 @@ const appConfig = {
     width: "490",
     //width of video player for instruction
   },
+  csvUrl:
+    "https://chris-csv-dropbox.s3.ap-south-1.amazonaws.com/B1G01+Stimuli.csv",
 };
 export default appConfig;
