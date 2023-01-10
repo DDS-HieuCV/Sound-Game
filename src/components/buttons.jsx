@@ -25,7 +25,6 @@ import { Button } from "@mui/material";
 import Papa from "papaparse";
 
 const playfile = require("../Audio/add/click.wav");
-var csvFilePath = require("../Assets/data/B1G01_Stimuli.csv");
 
 const AA = [
   "Charlie",
@@ -431,7 +430,6 @@ const handleCsvData = () => {
       Papa.parse(appConfig.csvUrl, {
         download: true,
         complete: (response) => {
-          console.log("response.data", response.data);
           if (
             response.data &&
             Array.isArray(response.data) &&
@@ -451,13 +449,13 @@ const handleCsvData = () => {
             });
             // Update data 
             results.forEach((speedArray, index) => eval(`speed${index} = speedArray`))
-            console.log("Load data from CSV");
+            console.log("Load data from CSV", results);
             resolve();
           } else {
             resolve(ERR_CANNOT_DOWNLOAD);
           }
         },
-        error:  (err, file, inputElem, reason) => {
+        error: (err, file, inputElem, reason) => {
           console.log(err);
           resolve(ERR_CANNOT_DOWNLOAD);
         },
@@ -467,7 +465,6 @@ const handleCsvData = () => {
       resolve(ERR_CANNOT_PARSE + exception.toString());
     }
   });
-
 };
 
 var hasCsvData = false;
