@@ -25,6 +25,7 @@ import { Button } from "@mui/material";
 import Papa from "papaparse";
 
 const playfile = require("../Audio/add/click.wav");
+const csvFilePath = appConfig.csvUrl;
 
 const AA = [
   "Charlie",
@@ -115,7 +116,12 @@ function Buttons() {
 
   function roundUpdate(check) {
     responceAudio();
-    if (initial < 8 && check === "button" && round % appConfig.Trials === 0) {
+    const nextRoundBaseTrialConfig = initial < 8 && check === "button" && round % appConfig.Trials === 0;
+    const showScorePopupBaseCsv = false === Boolean(arrBlockCsv[questionNumber + 1]) || arrBlockCsv[questionNumber + 1] !== arrBlockCsv[questionNumber];
+    const nextRoundCondition = hasLoadCsvFile ? false === showScorePopupBaseCsv : nextRoundBaseTrialConfig;
+    if(false === Boolean(arrBlockCsv[questionNumber + 1])) ++questionNumber;
+    
+    if (nextRoundCondition) {
       setRound(round + 1);
     } else {
       handleClickOpen();
@@ -189,19 +195,18 @@ function Buttons() {
   }
 
   function playAudio(initial) {
-    const arrSpeedAudio = eval(`speed${initial}`);
-    let audioIndex = -1;
-    if (hasCsvData) {
-      if (false === Boolean(arrPlayAudioIndex[initial])) {
-        arrPlayAudioIndex[initial] = 0;
-      }
-      // Using value from CSV file
-      audioIndex = arrPlayAudioIndex[initial]++;
+    if (hasLoadCsvFile && Boolean(arrPlayAudioFile[questionNumber])) {
+      // Get file name from CSV file
+      rfile = arrPlayAudioFile[questionNumber];
+      questionNumber++;
     } else {
       // Random audio when load data local
-      audioIndex = Math.floor(Math.random() * eval(`speed${initial}`).length);
+      let audioIndex = Math.floor(
+        Math.random() * eval(`speed${initial}`).length
+      );
+      const arrSpeedAudio = eval(`speed${initial}`);
+      rfile = arrSpeedAudio[audioIndex] ?? "talker2_010203_spd_66.wav";
     }
-    rfile = arrSpeedAudio[audioIndex] ?? "talker2_010203_spd_66.wav";
     const audioSong = require(`../Audio/${rfile}`);
     if (rfile) file = rfile.slice(8, 14);
     assigmentRandom(file);
@@ -223,7 +228,10 @@ function Buttons() {
   const handleChangeRound = (isFirstTime) => {
    if(!isFirstTime) timeout();
     output();
-    if (initial < 8 && dead !== 1) {
+    const continueGameBaseConfig = initial < 8 && dead !== 1;
+    const continueGame = hasLoadCsvFile ? Boolean(arrPlayAudioFile[questionNumber]) : continueGameBaseConfig;
+
+    if (continueGame) {
       // if (initial > 0);
       // disable();
       if(isFirstTime){
@@ -334,7 +342,7 @@ function Buttons() {
               open={open}
               handleClose={handleClose}
               Score={Score}
-              initial={initial}
+              isGameOver={hasLoadCsvFile ? false === Boolean(arrPlayAudioFile[questionNumber]) : initial === 8}
               generated={generated}
               csvUser={csvUser}
               csvResult={csvResult}
@@ -410,24 +418,32 @@ const playQuestionAudioFunc = audioUrl => {
 const handlePlayAudio = (audioUrl, audioEl) => {
   try {
     audioEl.src = audioUrl;
-    audioEl.load(); //call this to just preload the audio without playing
-    audioEl.play(); //call this to play the song right away
+    audioEl.load(); // Call this to just preload the audio without playing
+    audioEl.play(); // Call this to play the song right away
   } catch (error) {
     console.log(audioUrl, error);
     // Try again
+    audioEl.load();
     audioEl.play();
   }
 }
 
+
+
 const handleCsvData = () => {
-  arrPlayAudioIndex = [];
-  const ERR_CANNOT_DOWNLOAD = "Cannot download the file from url: " + appConfig.csvUrl + ". Please confirm that the file exists and permissions are correct.";
-  const ERR_CANNOT_PARSE = "Unable to parse the CSV file. Please check the CSV file and upload again. Error log:";
+  arrPlayAudioFile = [];
+  arrBlockCsv = [];
+  questionNumber = 0;
+  const ERR_CANNOT_DOWNLOAD =
+    "Cannot download the file from url: " +
+    csvFilePath +
+    ". Please confirm that the file exists and permissions are correct.";
+  const ERR_CANNOT_PARSE =
+    "Unable to parse the CSV file. Please check the CSV file and upload again. Error log:";
 
   return new Promise((resolve) => {
     try {
-      let results = [];
-      Papa.parse(appConfig.csvUrl, {
+      Papa.parse(csvFilePath, {
         download: true,
         complete: (response) => {
           if (
@@ -436,21 +452,19 @@ const handleCsvData = () => {
             Array.isArray(response.data[1]) &&
             response.data[1].length === 10
           ) {
-            hasCsvData = true;
             // Column structure: Block, Talker,	CallsignNum,	Callsign,	ColorNum,	Color,	NumberNum,	Number,	Speed,	Filename
             response.data.shift();
             response.data.forEach((rowData) => {
               let speedIndex = rowData[0] - 1;
               if (speedIndex < 0) return;
 
-              let arrSpeedAudioPath = results[speedIndex] || [];
-              arrSpeedAudioPath.push(rowData[9]);
-              results[speedIndex] = arrSpeedAudioPath;
+              arrPlayAudioFile.push(rowData[9]);
+              arrBlockCsv.push(rowData[0]);
             });
-            // Update data 
-            results.forEach((speedArray, index) => eval(`speed${index} = speedArray`))
-            console.log("Load data from CSV", results);
-            resolve();
+            hasLoadCsvFile = arrPlayAudioFile.length > 0;
+            console.log("Load data from CSV", arrBlockCsv);
+            if (hasLoadCsvFile) resolve();
+            else resolve(ERR_CANNOT_DOWNLOAD);
           } else {
             resolve(ERR_CANNOT_DOWNLOAD);
           }
@@ -467,8 +481,8 @@ const handleCsvData = () => {
   });
 };
 
-var hasCsvData = false;
-var arrPlayAudioIndex = [];
+var hasLoadCsvFile = false;
+var arrPlayAudioFile, arrBlockCsv, questionNumber;
 
 var speed7 = [
     "talker2_060105_spd_24.wav",

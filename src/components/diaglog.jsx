@@ -13,7 +13,7 @@ export const DialogComponent = ({
   open,
   handleClose,
   Score,
-  initial,
+  isGameOver,
   generated,
   csvUser,
   csvResult,
@@ -43,7 +43,7 @@ export const DialogComponent = ({
           <span className="sub" style={{ fontFamily: "Noto sans" }}>
             Your Score: {parseInt(Score) ?? "0"}
           </span>
-          {initial === 8 && (
+          {isGameOver && (
             <>
               <h2 className="sub">Game Over</h2>
               <Csv
@@ -57,7 +57,7 @@ export const DialogComponent = ({
         </DialogContentText>
       </DialogContent>
       <div style={{ backgroundColor: "#2EA0DE" }}>
-        {initial !== 8 && (
+        {!isGameOver && (
           <DialogActions>
             <Button
               onClick={afterBlock}
@@ -74,7 +74,7 @@ export const DialogComponent = ({
             </Button>
           </DialogActions>
         )}
-        {initial === 8 && (
+        {isGameOver && (
           <DialogActions>
             <Button
               autoFocus
