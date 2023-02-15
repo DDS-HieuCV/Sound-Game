@@ -22,3 +22,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 src/components/s
+
+.firebase/hosting.YnVpbGQ.cache
+.firebaserc
+/build.zip
+firebase.json
+yarn.lock
