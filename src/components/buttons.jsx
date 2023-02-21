@@ -116,10 +116,13 @@ function Buttons() {
 
   function roundUpdate(check) {
     responceAudio();
+
+    // End game
+    if(false === Boolean(arrBlockCsv[questionNumber])) handleClickOpen();
+
     const nextRoundBaseTrialConfig = initial < 8 && check === "button" && round % appConfig.Trials === 0;
     const showScorePopupBaseCsv = false === Boolean(arrBlockCsv[questionNumber + 1]) || arrBlockCsv[questionNumber + 1] !== arrBlockCsv[questionNumber];
     const nextRoundCondition = hasLoadCsvFile ? false === showScorePopupBaseCsv : nextRoundBaseTrialConfig;
-    if(false === Boolean(arrBlockCsv[questionNumber + 1])) ++questionNumber;
     
     if (nextRoundCondition) {
       setRound(round + 1);
